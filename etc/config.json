@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "Version",
+    "Edition",
+    "InstallDate",
+    "CacheBackend",
+    "Session",
+    "Patches",
+    "CustomersCount",
+    "SubscribersCount",
+    "SubscribersSubscribedCount",
+    "SubscribersUnsubscribedCount",
+    "SubscribersCustomersCount",
+    "FindDuplicatedCustomers",
+    "FindInvalidCustomers",
+    "Rewrites"
+  ]
+}
