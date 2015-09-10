@@ -31,11 +31,17 @@ class MagentoEnvironment
     private $log;
 
     /**
+     * @var Color
+     */
+    private $color;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->log = Logger::getLogger(__CLASS__);
+        $this->color = new Color();
     }
 
     /**
@@ -120,5 +126,13 @@ class MagentoEnvironment
     public function getOptions()
     {
         return $this->_options;
+    }
+
+    /**
+     * @return Color
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 }

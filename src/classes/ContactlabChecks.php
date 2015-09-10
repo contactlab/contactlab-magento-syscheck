@@ -172,10 +172,11 @@ class ContactlabChecks
                 }
             }
             $exitCode = $checkInstance->check();
-            printf("[%s] #%s %s\n",
+            $output = sprintf("[%s] #%s %s\n",
                 $exitCode,
                 strtolower($checkInstance->getCode()),
                 $checkInstance->getDescription());
+            print($this->getEnvironment()->getColor()->getColoredStringByCode($output, $exitCode));
             $checkInstance->reportSuccess();
             $checkInstance->reportError();
             echo PHP_EOL;

@@ -174,13 +174,13 @@ abstract class AbstractCheck implements CheckInterface
 
     public function reportSuccess() {
         foreach ($this->_success as $line) {
-            $this->outputLine("[Ok] " . $line);
+            $this->outputLine($this->getEnvironment()->getColor()->getColoredStringByCode("[Ok] ", self::SUCCESS) . $line);
         }
     }
 
     public function reportError() {
         foreach ($this->_error as $line) {
-            $this->outputLine("[Error] " . $line);
+            $this->outputLine($this->getEnvironment()->getColor()->getColoredStringByCode("[Error] ", self::ERROR) . $line);
         }
     }
 }

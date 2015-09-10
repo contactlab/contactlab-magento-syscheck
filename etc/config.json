@@ -1,5 +1,6 @@
 {
   "checks": [
+    "PhpVersion",
     "Version",
     "Edition",
     "InstallDate",
@@ -14,6 +15,7 @@
     "FindDuplicatedCustomers",
     "FindInvalidCustomers",
     "Rewrites",
-    "ContactlabAuthApiKey"
+    "ContactlabAuthApiKey",
+    "MemoryLimit"
   ]
 }
