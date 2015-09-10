@@ -13,23 +13,11 @@ class Options
      */
     private $log;
 
-    public function __construct($options)
+    public function __construct($options = false)
     {
         $this->log = Logger::getLogger(__CLASS__);
-        if (isset($options['checks'])) {
-            if (!is_array($options['checks'])) {
-                $options['checks'] = array($options['checks']);
-            }
-            $this->checks = $options['checks'];
-        }
-        if (isset($options['list'])) {
-            $this->onlyList = true;
-        }
-        if (isset($options['help'])) {
-            $this->help = true;
-        }
-        if (isset($options['path'])) {
-            $this->path = $options['path'];
+        if ($options !== false) {
+            $this->readOptions($options);
         }
     }
 
@@ -76,5 +64,36 @@ class Options
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function readOptions($options)
+    {
+        $this->resetOptions();
+        if (isset($options['checks'])) {
+            if (!is_array($options['checks'])) {
+                $options['checks'] = array($options['checks']);
+            }
+            $this->checks = $options['checks'];
+        }
+        if (isset($options['list'])) {
+            $this->onlyList = true;
+        }
+        if (isset($options['help'])) {
+            $this->help = true;
+        }
+        if (isset($options['path'])) {
+            $this->path = $options['path'];
+        }
+    }
+
+    /**
+     * Reset options.
+     */
+    public function resetOptions()
+    {
+        $this->checks = array();
+        $this->onlyList = false;
+        $this->help = false;
+        $this->path = false;
     }
 }

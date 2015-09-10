@@ -42,19 +42,34 @@ class ContactlabChecks
     private $log;
 
     /**
+     * Options.
+     * @var Options
+     */
+    private $options;
+
+    /**
      * Construct Checks
      * @param Options $options
      * @throws NoMagentoException
      */
     public function __construct(Options $options)
     {
-        if ($options->isHelp()) {
+        $this->log = Logger::getLogger(__CLASS__);
+        $this->options = $options;
+    }
+
+    /**
+     * Run tests.
+     * @throws NoMagentoException
+     */
+    public function run()
+    {
+        if ($this->options->isHelp()) {
             $this->printHelp();
             return;
         }
-        $this->log = Logger::getLogger(__CLASS__);
-        $this->_readConfiguration($options);
-        if ($options->isOnlyList()) {
+        $this->readConfiguration();
+        if ($this->options->isOnlyList()) {
             $this->_listChecks();
         } else {
             $this->_startChecks();
@@ -63,28 +78,29 @@ class ContactlabChecks
 
     /**
      * Read configuration.
-     * @param Options $options
      * @throws NoMagentoException
      */
-    private function _readConfiguration(Options $options)
+    public function readConfiguration()
     {
         $this->log->trace("Read configuration");
         $this->_environment = new MagentoEnvironment();
-        if (!($this->_magePath = $this->_findMagePath($options))) {
-            throw new NoMagentoException();
+        if (!$this->options->isOnlyList()) {
+            if (!($this->_magePath = $this->_findMagePath())) {
+                throw new NoMagentoException();
+            }
         }
-        $this->_environment->setBasePath($this->_magePath);
-        $this->_environment->setOptions($options);
-        $this->_configuration = json_decode(file_get_contents($this->_getConfigFile()));
+        $this->getEnvironment()->setBasePath($this->_magePath);
+        $this->getEnvironment()->setOptions($this->options);
+        $this->_configuration = json_decode(file_get_contents($this->getConfigFile()));
     }
 
     /**
      * Get configuration file.
      * @return string
      */
-    private function _getConfigFile()
+    public function getConfigFile()
     {
-        return realpath(__DIR__ . '/../etc/config.json');
+        return realpath(__DIR__ . '/../../etc/config.json');
     }
 
     /**
@@ -93,11 +109,11 @@ class ContactlabChecks
     private function _startChecks()
     {
         $this->log->trace("Start checks");
-        foreach ($this->_configuration->checks as $check) {
+        foreach ($this->getConfiguration()->checks as $check) {
             $checkClass = $check . 'Check';
             /** @var CheckInterface $checkInstance */
             $checkInstance = new $checkClass();
-            $checks = $this->_environment->getOptions()->getChecks();
+            $checks = $this->getEnvironment()->getOptions()->getChecks();
             if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
                 $this->log->trace("Skip this check (not included in args)");
                 continue;
@@ -105,7 +121,7 @@ class ContactlabChecks
             $this->_startCheck($checkInstance);
         }
         if ($this->_dbConnected) {
-            $this->_environment->getDb()->close();
+            $this->getEnvironment()->getDb()->close();
         }
     }
 
@@ -115,11 +131,11 @@ class ContactlabChecks
     private function _listChecks()
     {
         $this->log->trace("List checks");
-        foreach ($this->_configuration->checks as $check) {
+        foreach ($this->getConfiguration()->checks as $check) {
             $checkClass = $check . 'Check';
             /** @var CheckInterface $checkInstance */
             $checkInstance = new $checkClass();
-            $checks = $this->_environment->getOptions()->getChecks();
+            $checks = $this->getEnvironment()->getOptions()->getChecks();
             if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
                 continue;
             }
@@ -134,7 +150,7 @@ class ContactlabChecks
     private function _startCheck(CheckInterface $checkInstance)
     {
         $this->log->trace("Starts single check");
-        $checkInstance->setEnvironment($this->_environment);
+        $checkInstance->setEnvironment($this->getEnvironment());
 
         if (($checkInstance->needContactlab() || $checkInstance->needMageRun() || $checkInstance->needMage()) && !$this->_magentoRequired) {
             $this->_requireMagento();
@@ -201,14 +217,13 @@ class ContactlabChecks
 
     /**
      * Find Mage Path.
-     * @param Options $options
      * @return bool
      */
-    private function _findMagePath(Options $options)
+    private function _findMagePath()
     {
         $this->log->trace("Looking for magento path");
-        if ($options->hasPath()) {
-            $path = $options->getPath();
+        if ($this->options->hasPath()) {
+            $path = $this->options->getPath();
             return $this->_findMagePathInto($path);
         } else {
             return $this->_findMagePathInto(getcwd());
@@ -260,12 +275,12 @@ class ContactlabChecks
         $localXml = simplexml_load_file($this->_getLocalXml());
         $db = $localXml->global->resources->default_setup->connection;
         $prefix = (string) $localXml->global->resources->db->table_prefix;
-        $this->_environment->setDbPrefix($prefix);
+        $this->getEnvironment()->setDbPrefix($prefix);
         $mysqli = new mysqli((string) $db->host, (string) $db->username, (string) $db->password, (string) $db->dbname);
         if ($mysqli->connect_errno) {
             throw new IllegalStateException($mysqli->connect_error);
         }
-        $this->_environment->setDb($mysqli);
+        $this->getEnvironment()->setDb($mysqli);
     }
 
     /**
@@ -274,7 +289,7 @@ class ContactlabChecks
      */
     private function _getLocalXml()
     {
-        return $this->_environment->getBasePath() . '/app/etc/local.xml';
+        return $this->getEnvironment()->getBasePath() . '/app/etc/local.xml';
     }
 
     /**
@@ -291,8 +306,46 @@ class ContactlabChecks
         return Mage::helper('core')->isModuleEnabled('Contactlab_Commons');
     }
 
-    private function printHelp()
+    /**
+     * Print help.
+     */
+    public function printHelp()
     {
-        readfile(__DIR__ . '/../etc/help.txt');
+        readfile($this->getHelpFile());
+    }
+
+    /**
+     * Get help file.
+     * @return string
+     */
+    public function getHelpFile()
+    {
+        return realpath(__DIR__ . '/../../etc/help.txt');
+    }
+
+    /**
+     * Options.
+     * @return Options
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Get Environment.
+     */
+    public function getEnvironment()
+    {
+        return $this->_environment;
+    }
+
+    /**
+     * Get configuration.
+     * @return stdClass
+     */
+    public function getConfiguration()
+    {
+        return $this->_configuration;
     }
 }

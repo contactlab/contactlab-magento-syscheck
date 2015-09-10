@@ -9,7 +9,7 @@ class MyLoggerConfigurator implements LoggerConfigurator
         $pattern->activateOptions();
 
         $appFile = new LoggerAppenderFile();
-        $appFile->setFile(__DIR__ . "/../var/log/checks.log");
+        $appFile->setFile(__DIR__ . "/../../var/log/checks.log");
         $appFile->setAppend(true);
         $appFile->setThreshold('all');
         $appFile->activateOptions();

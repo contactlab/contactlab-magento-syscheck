@@ -1,4 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-require_once(realpath(__DIR__ . "/run-check.php"));
+require_once(realpath(__DIR__ . "/src/run-check.php"));
