@@ -29,7 +29,7 @@ class SessionCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Session backend.";
+        return "Session backend";
     }
 
     /**

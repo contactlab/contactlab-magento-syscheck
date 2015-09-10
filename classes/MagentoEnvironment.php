@@ -19,6 +19,12 @@ class MagentoEnvironment
     private $_dbPrefix;
 
     /**
+     * Options.
+     * @var Options
+     */
+    private $_options;
+
+    /**
      * Get base path.
      * @return String
      */
@@ -82,5 +88,23 @@ class MagentoEnvironment
     public function getGitBase()
     {
         return "https://raw.githubusercontent.com/contactlab/contactlab-magento-connect";
+    }
+
+    /**
+     * Set options.
+     * @param Options $options
+     */
+    public function setOptions(Options $options)
+    {
+        $this->_options = $options;
+    }
+
+    /**
+     * Get options.
+     * @return Options
+     */
+    public function getOptions()
+    {
+        return $this->_options;
     }
 }

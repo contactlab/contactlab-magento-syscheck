@@ -29,7 +29,7 @@ class SubscribersUnsubscribedCountCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check Unsubscribed Newsletter subscribers count.";
+        return "Check Unsubscribed Newsletter subscribers count";
     }
 
     /**

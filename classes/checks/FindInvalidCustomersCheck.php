@@ -34,7 +34,7 @@ class FindInvalidCustomersCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Find invalid customers check.";
+        return "Find invalid customers check";
     }
 
     /**

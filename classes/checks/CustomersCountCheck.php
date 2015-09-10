@@ -36,7 +36,7 @@ class CustomersCountCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check customers count.";
+        return "Check customers count";
     }
 
     /**

@@ -43,30 +43,33 @@ class ContactlabChecks
 
     /**
      * Construct Checks
-     * @param array $args
+     * @param Options $options
      * @throws NoMagentoException
      */
-    public function __construct(array $args)
+    public function __construct(Options $options)
     {
         $this->log = Logger::getLogger(__CLASS__);
-        $this->log->error("We have liftoff.");
-        if (count($args) > 0) {
-            $args = array_slice($args, 1);
+        $this->_readConfiguration($options);
+        if ($options->isOnlyList()) {
+            $this->_listChecks();
+        } else {
+            $this->_startChecks();
         }
-        $this->_readConfiguration();
-        $this->_startChecks($args);
     }
 
     /**
      * Read configuration.
+     * @param Options $options
+     * @throws NoMagentoException
      */
-    private function _readConfiguration()
+    private function _readConfiguration(Options $options)
     {
         $this->_environment = new MagentoEnvironment();
         if (!($this->_magePath = $this->_findMagePath())) {
             throw new NoMagentoException();
         }
         $this->_environment->setBasePath($this->_magePath);
+        $this->_environment->setOptions($options);
         $this->_configuration = json_decode(file_get_contents($this->_getConfigFile()));
     }
 
@@ -81,14 +84,14 @@ class ContactlabChecks
 
     /**
      * Start Checks.
-     * @param array $checks
      */
-    private function _startChecks(array $checks)
+    private function _startChecks()
     {
         foreach ($this->_configuration->checks as $check) {
             $checkClass = $check . 'Check';
             /** @var CheckInterface $checkInstance */
             $checkInstance = new $checkClass();
+            $checks = $this->_environment->getOptions()->getChecks();
             if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
                 continue;
             }
@@ -96,6 +99,23 @@ class ContactlabChecks
         }
         if ($this->_dbConnected) {
             $this->_environment->getDb()->close();
+        }
+    }
+
+    /**
+     * List Checks.
+     */
+    private function _listChecks()
+    {
+        foreach ($this->_configuration->checks as $check) {
+            $checkClass = $check . 'Check';
+            /** @var CheckInterface $checkInstance */
+            $checkInstance = new $checkClass();
+            $checks = $this->_environment->getOptions()->getChecks();
+            if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
+                continue;
+            }
+            $this->_printCheck($checkInstance);
         }
     }
 
@@ -146,6 +166,15 @@ class ContactlabChecks
                 $checkInstance->getDescription());
             printf("  Failed: %s\n", $e->getMessage());
         }
+    }
+
+    /**
+     * Print single check.
+     * @param CheckInterface $checkInstance
+     */
+    private function _printCheck(CheckInterface $checkInstance)
+    {
+        printf("#%-15s %s\n", strtolower($checkInstance->getCode()), $checkInstance->getDescription());
     }
 
     /**

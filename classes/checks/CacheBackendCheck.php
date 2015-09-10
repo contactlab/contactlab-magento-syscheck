@@ -29,7 +29,7 @@ class CacheBackendCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check cache backend.";
+        return "Check cache backend";
     }
 
     /**

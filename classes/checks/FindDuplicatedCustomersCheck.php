@@ -34,7 +34,7 @@ class FindDuplicatedCustomersCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Find duplicated customers check.";
+        return "Find duplicated customers check";
     }
 
     /**

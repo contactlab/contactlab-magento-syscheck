@@ -29,7 +29,7 @@ class SubscribersSubscribedCountCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check Subscribed Newsletter subscribers count.";
+        return "Check Subscribed Newsletter subscribers count";
     }
 
     /**

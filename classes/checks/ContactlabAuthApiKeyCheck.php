@@ -34,7 +34,7 @@ class ContactlabAuthApiKeyCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check auth_api_key.";
+        return "Check auth_api_key";
     }
 
     /**

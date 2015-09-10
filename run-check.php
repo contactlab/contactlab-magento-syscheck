@@ -19,8 +19,20 @@ spl_autoload_register('autoLoader');
 
 Logger::configure(array('root'), 'MyLoggerConfigurator');
 
+$shortOpts = "c:l";
+$longOpts = array("checks:", "list");
+$options = getopt($shortOpts, $longOpts);
+if (isset($options['c'])) {
+    $options['checks'] = $options['c'];
+    unset($options['c']);
+}
+if (isset($options['l'])) {
+    $options['list'] = $options['l'];
+    unset($options['l']);
+}
 try {
-    new ContactlabChecks($argv);
+    /** @var Options $options */
+    new ContactlabChecks(new Options($options));
 } catch (IllegalStateException $e) {
     echo $e->getMessage() . "\n";
 }

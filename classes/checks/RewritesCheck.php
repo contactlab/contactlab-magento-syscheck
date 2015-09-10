@@ -29,7 +29,7 @@ class RewritesCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check magento rewrites.";
+        return "Check magento rewrites";
     }
 
     /**

@@ -29,7 +29,7 @@ class InstallDateCheck extends AbstractCheck
      */
     function getDescription()
     {
-        return "Check install date.";
+        return "Check install date";
     }
 
     /**
