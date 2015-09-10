@@ -48,6 +48,10 @@ class ContactlabChecks
      */
     public function __construct(Options $options)
     {
+        if ($options->isHelp()) {
+            $this->printHelp();
+            return;
+        }
         $this->log = Logger::getLogger(__CLASS__);
         $this->_readConfiguration($options);
         if ($options->isOnlyList()) {
@@ -65,7 +69,7 @@ class ContactlabChecks
     private function _readConfiguration(Options $options)
     {
         $this->_environment = new MagentoEnvironment();
-        if (!($this->_magePath = $this->_findMagePath())) {
+        if (!($this->_magePath = $this->_findMagePath($options))) {
             throw new NoMagentoException();
         }
         $this->_environment->setBasePath($this->_magePath);
@@ -188,11 +192,18 @@ class ContactlabChecks
 
     /**
      * Find Mage Path.
+     * @param Options $options
      * @return bool
      */
-    private function _findMagePath()
+    private function _findMagePath(Options $options)
     {
-        return $this->_findMagePathInto(getcwd());
+        if ($options->hasPath()) {
+            $path = $options->getPath();
+            return $this->_findMagePathInto($path);
+
+        } else {
+            return $this->_findMagePathInto(getcwd());
+        }
     }
 
     /**
@@ -267,5 +278,10 @@ class ContactlabChecks
     private function _checkContactlabPlugins()
     {
         return Mage::helper('core')->isModuleEnabled('Contactlab_Common');
+    }
+
+    private function printHelp()
+    {
+        readfile(__DIR__ . '/../etc/help.txt');
     }
 }
