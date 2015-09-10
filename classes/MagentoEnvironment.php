@@ -25,6 +25,20 @@ class MagentoEnvironment
     private $_options;
 
     /**
+     * Logger.
+     * @var Logger
+     */
+    private $log;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->log = Logger::getLogger(__CLASS__);
+    }
+
+    /**
      * Get base path.
      * @return String
      */

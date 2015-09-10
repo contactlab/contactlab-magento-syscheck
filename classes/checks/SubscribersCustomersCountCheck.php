@@ -47,6 +47,7 @@ class SubscribersCustomersCountCheck extends AbstractCheck
      */
     private function getCustomersCount()
     {
+        $this->log->trace("Check subscribers with Customer count from database");
         $sql = sprintf("select count(1) from %s where customer_id != 0", $this->_getTableName('newsletter_subscriber'));
         return $this->_getSqlResult($sql);
     }

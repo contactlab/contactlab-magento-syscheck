@@ -43,6 +43,7 @@ class InstallDateCheck extends AbstractCheck
 
     private function getInstallDate()
     {
+        $this->log->trace("Check install date from global/install/date");
         $config = Mage::app()->getConfig();
         return $config->getNode('global/install/date');
     }

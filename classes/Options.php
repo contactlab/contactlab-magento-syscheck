@@ -7,8 +7,15 @@ class Options
     private $help = false;
     private $path = false;
 
+    /**
+     * Logger.
+     * @var Logger
+     */
+    private $log;
+
     public function __construct($options)
     {
+        $this->log = Logger::getLogger(__CLASS__);
         if (isset($options['checks'])) {
             if (!is_array($options['checks'])) {
                 $options['checks'] = array($options['checks']);

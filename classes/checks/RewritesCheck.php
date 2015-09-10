@@ -10,6 +10,7 @@ class RewritesCheck extends AbstractCheck
      */
     protected function doCheck()
     {
+        $this->log->trace("Check for rewrites");
         $this->_checkRewrites();
         return self::SUCCESS;
     }
@@ -47,6 +48,7 @@ class RewritesCheck extends AbstractCheck
     private function _checkRewrites()
     {
         foreach (array("Commons", "Subscribers", "Template", "Transactional") as $module) {
+            $this->log->trace("Check for rewrites into $module");
             $this->_checkRewritesFor($module);
         }
     }
@@ -59,13 +61,15 @@ class RewritesCheck extends AbstractCheck
     {
         $branch = $this->getEnvironment()->getGitBranch();
         $base = $this->getEnvironment()->getGitBase();
-        $configXml = simplexml_load_file(sprintf("%s/%s/app/code/community/Contactlab/%s/etc/config.xml",
-            $base, $branch, $module));
+        $url = sprintf("%s/%s/app/code/community/Contactlab/%s/etc/config.xml", $base, $branch, $module);
+        $this->log->trace("Retrieve $url");
+        $configXml = simplexml_load_file($url);
         $this->_checkRewritesForConfig($configXml);
     }
 
     private function _checkRewritesForConfig(SimpleXMLElement $configXml)
     {
+        $this->log->trace("Check for rewrites from xml");
         $this->_checkRewritesForModels($configXml->global->models);
         $this->_checkRewritesForBlocks($configXml->global->blocks);
     }
@@ -75,6 +79,7 @@ class RewritesCheck extends AbstractCheck
      */
     private function _checkRewritesForModels(SimpleXMLElement $models)
     {
+        $this->log->trace("Check for rewrites for models");
         $rewrites = $this->_getRewrites($models);
         foreach ($rewrites['default'] as $rewrite) {
             $this->_checkRewritesForModel($rewrite);
@@ -90,6 +95,7 @@ class RewritesCheck extends AbstractCheck
      */
     private function _checkRewritesForBlocks(SimpleXMLElement $blocks)
     {
+        $this->log->trace("Check for rewrites for blocks");
         $rewrites = $this->_getRewrites($blocks);
         foreach ($rewrites['default'] as $rewrite) {
             $this->_checkRewritesForBlock($rewrite);
@@ -128,6 +134,7 @@ class RewritesCheck extends AbstractCheck
      */
     private function _checkRewritesForModel($rewrite)
     {
+        $this->log->trace("Check for rewrites for model $rewrite");
         $modelName = Mage::app()->getConfig()->getModelClassName($rewrite);
         $this->_checkClass("Model", $modelName, $rewrite);
     }
@@ -138,6 +145,7 @@ class RewritesCheck extends AbstractCheck
      */
     private function _checkRewritesForResource($rewrite)
     {
+        $this->log->trace("Check for rewrites for resource model $rewrite");
         $modelName = Mage::app()->getConfig()->getResourceModelClassName($rewrite);
         $this->_checkClass("Resource", $modelName, $rewrite);
     }
@@ -148,6 +156,7 @@ class RewritesCheck extends AbstractCheck
      */
     private function _checkRewritesForBlock($rewrite)
     {
+        $this->log->trace("Check for rewrites for block $rewrite");
         $block = Mage::app()->getConfig()->getBlockClassName($rewrite);
         $this->_checkClass("Block", $block, $rewrite);
     }

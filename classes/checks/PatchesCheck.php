@@ -48,6 +48,7 @@ class PatchesCheck extends AbstractCheck
      */
     private function _readPatchFile($patchFile)
     {
+        $this->log->trace("List installed patches from patch file");
         $handle = fopen($patchFile, "r");
         while (($line = fgets($handle)) !== false) {
             if (!preg_match('/\|/', $line)) {

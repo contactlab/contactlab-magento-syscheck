@@ -54,6 +54,7 @@ class SubscribersCountCheck extends AbstractCheck
      */
     private function count()
     {
+        $this->log->trace("Check newsletter subscribers from database");
         $sql = sprintf("select count(1) from %s", $this->_getTableName('newsletter_subscriber'));
         return $this->_getSqlResult($sql);
     }

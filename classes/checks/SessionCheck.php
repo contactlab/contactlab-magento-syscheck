@@ -47,6 +47,7 @@ class SessionCheck extends AbstractCheck
      */
     private function getCacheBackend()
     {
+        $this->log->trace("Check session save backend");
         $config = Mage::app()->getConfig();
         return (string) $config->getNode('global/session_save');
     }

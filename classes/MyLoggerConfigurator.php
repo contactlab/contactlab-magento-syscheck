@@ -18,6 +18,7 @@ class MyLoggerConfigurator implements LoggerConfigurator
 
         $root = $hierarchy->getRootLogger();
         $root->addAppender($appFile);
+        $root->setLevel(LoggerLevel::getLevelTrace());
         //$root->addAppender($appEcho);
     }
 }

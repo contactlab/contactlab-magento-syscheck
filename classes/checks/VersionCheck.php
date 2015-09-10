@@ -11,6 +11,7 @@ class VersionCheck extends AbstractCheck
      */
     protected function doCheck()
     {
+        $this->log->trace("Check Magento version from Mage");
         return $this->success(sprintf("Magento version: %s", Mage::getVersion()));
     }
 

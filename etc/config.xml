@@ -1,6 +1,0 @@
-<configuration xmlns="http://logging.apache.org/log4php/">
-    <root>
-        <level value="WARN" />
-        <appender_ref ref="preInstallerCheckAppender" />
-    </root>
-</configuration>

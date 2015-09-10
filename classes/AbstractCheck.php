@@ -7,10 +7,26 @@ abstract class AbstractCheck implements CheckInterface
     private $_error = array();
 
     /**
+     * Logger.
+     * @var Logger
+     */
+    protected $log;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->log = Logger::getLogger(__CLASS__);
+        $this->log->trace("Construct " . $this->getName() . 'check');
+    }
+
+    /**
      * Start check.
      * @return String
      */
     public function check() {
+        $this->log->trace("Start " . $this->getName() . 'check');
         return $this->doCheck();
     }
 
@@ -61,6 +77,7 @@ abstract class AbstractCheck implements CheckInterface
      */
     protected function success($value)
     {
+        $this->log->trace("Success: " . $value);
         $this->_addSuccess($value);
         return self::SUCCESS;
     }
@@ -71,6 +88,7 @@ abstract class AbstractCheck implements CheckInterface
      */
     protected function error($value)
     {
+        $this->log->error("Error: " . $value);
         $this->_addError($value);
         return self::ERROR;
     }
@@ -129,6 +147,7 @@ abstract class AbstractCheck implements CheckInterface
      */
     protected function _getSqlResult($sql)
     {
+        $this->log->debug("Sql: " . $sql);
         $stmt = $this->getEnvironment()->getDb()->prepare($sql);
         if (!$stmt) {
             throw new FailedCheckException($this->getEnvironment()->getDb()->error);

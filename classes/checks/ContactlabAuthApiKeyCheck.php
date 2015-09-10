@@ -11,6 +11,7 @@ class ContactlabAuthApiKeyCheck extends AbstractCheck
      */
     protected function doCheck()
     {
+        $this->log->trace("Check contactlab_template/queue/auth_api_key from configuration");
         $key = Mage::getStoreConfig('contactlab_template/queue/auth_api_key');
         if (empty($key)) {
             return $this->error("No auth_api_key specified");

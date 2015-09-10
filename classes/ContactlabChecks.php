@@ -68,6 +68,7 @@ class ContactlabChecks
      */
     private function _readConfiguration(Options $options)
     {
+        $this->log->trace("Read configuration");
         $this->_environment = new MagentoEnvironment();
         if (!($this->_magePath = $this->_findMagePath($options))) {
             throw new NoMagentoException();
@@ -91,12 +92,14 @@ class ContactlabChecks
      */
     private function _startChecks()
     {
+        $this->log->trace("Start checks");
         foreach ($this->_configuration->checks as $check) {
             $checkClass = $check . 'Check';
             /** @var CheckInterface $checkInstance */
             $checkInstance = new $checkClass();
             $checks = $this->_environment->getOptions()->getChecks();
             if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
+                $this->log->trace("Skip this check (not included in args)");
                 continue;
             }
             $this->_startCheck($checkInstance);
@@ -111,6 +114,7 @@ class ContactlabChecks
      */
     private function _listChecks()
     {
+        $this->log->trace("List checks");
         foreach ($this->_configuration->checks as $check) {
             $checkClass = $check . 'Check';
             /** @var CheckInterface $checkInstance */
@@ -129,6 +133,7 @@ class ContactlabChecks
      */
     private function _startCheck(CheckInterface $checkInstance)
     {
+        $this->log->trace("Starts single check");
         $checkInstance->setEnvironment($this->_environment);
 
         if (($checkInstance->needContactlab() || $checkInstance->needMageRun() || $checkInstance->needMage()) && !$this->_magentoRequired) {
@@ -146,6 +151,7 @@ class ContactlabChecks
         try {
             if ($checkInstance->needContactlab()) {
                 if (!$this->_checkContactlabPlugins()) {
+                    $this->log->error("Not a Contactlab Installation");
                     throw new NoContactlabPluginsException();
                 }
             }
@@ -163,12 +169,14 @@ class ContactlabChecks
                 strtolower($checkInstance->getCode()),
                 $checkInstance->getDescription());
             printf("  Skipped: %s\n", $e->getMessage());
+            $this->log->info("Check skipped", $e);
         } catch (FailedCheckException $e) {
             printf("[%s] #%s %s\n",
                 CheckInterface::FATAL,
                 strtolower($checkInstance->getCode()),
                 $checkInstance->getDescription());
             printf("  Failed: %s\n", $e->getMessage());
+            $this->log->error("Check failed", $e);
         }
     }
 
@@ -186,6 +194,7 @@ class ContactlabChecks
      */
     private function _requireMagento()
     {
+        $this->log->trace("Requiring magento");
         require_once($this->_magePath . '/app/Mage.php');
         $this->_magentoRequired = true;
     }
@@ -197,10 +206,10 @@ class ContactlabChecks
      */
     private function _findMagePath(Options $options)
     {
+        $this->log->trace("Looking for magento path");
         if ($options->hasPath()) {
             $path = $options->getPath();
             return $this->_findMagePathInto($path);
-
         } else {
             return $this->_findMagePathInto(getcwd());
         }
@@ -247,6 +256,7 @@ class ContactlabChecks
      */
     private function _connectToDb()
     {
+        $this->log->trace("Connect to db");
         $localXml = simplexml_load_file($this->_getLocalXml());
         $db = $localXml->global->resources->default_setup->connection;
         $prefix = (string) $localXml->global->resources->db->table_prefix;
@@ -272,12 +282,13 @@ class ContactlabChecks
      */
     private function _runMagento()
     {
+        $this->log->trace("Running magento");
         Mage::app();
     }
 
     private function _checkContactlabPlugins()
     {
-        return Mage::helper('core')->isModuleEnabled('Contactlab_Common');
+        return Mage::helper('core')->isModuleEnabled('Contactlab_Commons');
     }
 
     private function printHelp()

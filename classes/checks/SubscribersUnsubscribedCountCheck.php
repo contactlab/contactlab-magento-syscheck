@@ -47,6 +47,7 @@ class SubscribersUnsubscribedCountCheck extends AbstractCheck
      */
     private function getCustomersCount()
     {
+        $this->log->trace("Check unsubscribed Customer count from database");
         $sql = sprintf("select count(1) from %s where subscriber_status != 1", $this->_getTableName('newsletter_subscriber'));
         return $this->_getSqlResult($sql);
     }
