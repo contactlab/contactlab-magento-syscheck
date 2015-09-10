@@ -20,7 +20,7 @@ spl_autoload_register('autoLoader');
 Logger::configure(array('root'), 'MyLoggerConfigurator');
 
 try {
-    new PreInstallChecks($argv);
+    new ContactlabChecks($argv);
 } catch (IllegalStateException $e) {
     echo $e->getMessage() . "\n";
 }

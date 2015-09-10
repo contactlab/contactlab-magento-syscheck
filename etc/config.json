@@ -13,6 +13,7 @@
     "SubscribersCustomersCount",
     "FindDuplicatedCustomers",
     "FindInvalidCustomers",
-    "Rewrites"
+    "Rewrites",
+    "ContactlabAuthApiKey"
   ]
 }

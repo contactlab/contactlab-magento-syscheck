@@ -85,6 +85,15 @@ abstract class AbstractCheck implements CheckInterface
     }
 
     /**
+     * Need Contactlab installation?
+     * @return bool
+     */
+    public function needContactlab()
+    {
+        return false;
+    }
+
+    /**
      * Need Mage object?
      * @return bool
      */

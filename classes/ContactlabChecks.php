@@ -3,7 +3,7 @@
 /**
  * Class PreInstallChecks.
  */
-class PreInstallChecks
+class ContactlabChecks
 {
     /**
      * @var stdClass
@@ -107,10 +107,10 @@ class PreInstallChecks
     {
         $checkInstance->setEnvironment($this->_environment);
 
-        if (($checkInstance->needMageRun() || $checkInstance->needMage()) && !$this->_magentoRequired) {
+        if (($checkInstance->needContactlab() || $checkInstance->needMageRun() || $checkInstance->needMage()) && !$this->_magentoRequired) {
             $this->_requireMagento();
         }
-        if ($checkInstance->needMageRun() && !$this->_magentoRun) {
+        if (($checkInstance->needContactlab() || $checkInstance->needMageRun()) && !$this->_magentoRun) {
             $this->_runMagento();
         }
         if ($checkInstance->needDatabase() && !$this->_dbConnected) {
@@ -120,6 +120,11 @@ class PreInstallChecks
             $this->_connectToDb();
         }
         try {
+            if ($checkInstance->needContactlab()) {
+                if (!$this->_checkContactlabPlugins()) {
+                    throw new NoContactlabPluginsException();
+                }
+            }
             $exitCode = $checkInstance->check();
             printf("[%s] #%s %s\n",
                 $exitCode,
@@ -129,6 +134,10 @@ class PreInstallChecks
             $checkInstance->reportError();
             echo PHP_EOL;
         } catch (SkipCheckException $e) {
+            printf("[%s] #%s %s\n",
+                CheckInterface::SKIP,
+                strtolower($checkInstance->getCode()),
+                $checkInstance->getDescription());
             printf("  Skipped: %s\n", $e->getMessage());
         } catch (FailedCheckException $e) {
             printf("[%s] #%s %s\n",
@@ -224,5 +233,10 @@ class PreInstallChecks
     private function _runMagento()
     {
         Mage::app();
+    }
+
+    private function _checkContactlabPlugins()
+    {
+        return Mage::helper('core')->isModuleEnabled('Contactlab_Common');
     }
 }

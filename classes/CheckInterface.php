@@ -64,4 +64,9 @@ interface CheckInterface
      * Report errors.
      */
     public function reportError();
+
+    /**
+     * Need contactlab installation.
+     */
+    public function needContactlab();
 }
