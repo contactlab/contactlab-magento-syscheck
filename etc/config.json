@@ -14,8 +14,22 @@
     "SubscribersCustomersCount",
     "FindDuplicatedCustomers",
     "FindInvalidCustomers",
+    "NumberOfOrders",
+    "NumberOfProducts",
     "Rewrites",
     "ContactlabAuthApiKey",
     "MemoryLimit"
-  ]
+  ],
+  "mail": {
+    "report_recipients": [
+      {
+        "name": "Andrea Gaspardo",
+        "mail": "andrea.gaspardo@webformat.com"
+      }
+    ],
+    "from": {
+      "name": "Andrea Gaspardo",
+      "mail": "andrea.gaspardo@webformat.com"
+    }
+  }
 }

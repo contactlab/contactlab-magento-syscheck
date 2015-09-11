@@ -48,6 +48,11 @@ class ContactlabChecks
     private $options;
 
     /**
+     * @var array[CheckInterface]
+     */
+    private $_checks = array();
+
+    /**
      * Construct Checks
      * @param Options $options
      * @throws NoMagentoException
@@ -104,6 +109,24 @@ class ContactlabChecks
     }
 
     /**
+     * Get mail head file.
+     * @return string
+     */
+    public function getHeadMailFile()
+    {
+        return realpath(__DIR__ . '/../../etc/header.html');
+    }
+
+    /**
+     * Get mail footer file.
+     * @return string
+     */
+    public function getFooterMailFile()
+    {
+        return realpath(__DIR__ . '/../../etc/footer.html');
+    }
+
+    /**
      * Start Checks.
      */
     private function _startChecks()
@@ -118,10 +141,14 @@ class ContactlabChecks
                 $this->log->trace("Skip this check (not included in args)");
                 continue;
             }
+            $this->_checks[] = $checkInstance;
             $this->_startCheck($checkInstance);
         }
         if ($this->_dbConnected) {
             $this->getEnvironment()->getDb()->close();
+        }
+        if ($this->getOptions()->mustSendMail()) {
+            $this->doSendMail();
         }
     }
 
@@ -348,5 +375,105 @@ class ContactlabChecks
     public function getConfiguration()
     {
         return $this->_configuration;
+    }
+
+    /**
+     * Send report mail.
+     * @throws IllegalStateException
+     */
+    private function doSendMail()
+    {
+        $configuration = $this->getConfiguration();
+        $mail = $configuration->mail;
+        if (empty($mail->report_recipients)) {
+            throw new IllegalStateException("No recipients configured");
+        }
+        if (empty($mail->from)) {
+            throw new IllegalStateException("No mail sender configured");
+        }
+        $header = "From: " . $this->buildMailRecipient($mail->from) . "\n";
+        $recipients = $mail->report_recipients;
+        if (count($recipients) > 1) {
+            $header .= "CC: " . $this->buildMailCCRecipients($recipients) . "\n";
+        }
+        $header .= "MIME-Version: 1.0\n";
+        $header .= "Content-Type: text/html; charset=\"utf8\"\n";
+        $header .= "Content-Transfer-Encoding: 7bit\n\n";
+        $msg = $this->getMailBody();
+        $subject = $this->getMailSubject();
+        echo $header;
+        if (!@mail($this->buildMailRecipient($recipients[0]),
+            $subject, $msg, $header)) {
+            throw new IllegalStateException("Could not send notification email");
+        }
+    }
+
+    private function buildMailRecipient($recipient)
+    {
+        return sprintf("%s <%s>", $recipient->name, $recipient->mail);
+    }
+
+    private function buildMailCCRecipients($recipients)
+    {
+        $rv = "";
+        foreach(array_slice($recipients, 1) as $recipient) {
+            $rv .= ", " . $this->buildMailRecipient($recipient);
+        }
+        return preg_replace('|^, |', '', $rv);
+    }
+
+    private function getMailBody()
+    {
+        $success = $this->buildHtmlReport(CheckInterface::SUCCESS);
+        $skipped = $this->buildHtmlReport(CheckInterface::SKIP);
+        $fatal = $this->buildHtmlReport(CheckInterface::FATAL);
+        $error = $this->buildHtmlReport(CheckInterface::ERROR);
+
+        $body = $fatal . $error . $skipped . $success;
+
+        return file_get_contents($this->getFooterMailFile())
+             . $body . file_get_contents($this->getFooterMailFile());
+    }
+
+    private function getMailSubject()
+    {
+        $subject = "Contactlab Magento Syscheck";
+        $success = $this->countChecks(CheckInterface::SUCCESS);
+        $skipped = $this->countChecks(CheckInterface::SKIP);
+        $fatal = $this->countChecks(CheckInterface::FATAL);
+        $error = $this->countChecks(CheckInterface::ERROR);
+        if ($skipped + $fatal + $error === 0 && $success > 0) {
+            return sprintf("%s - Success: %s checks", $subject, $success);
+        }
+        return sprintf("%s - Success: %s, skipped: %s, error: %s, Fatal: %s",
+            $subject, $success, $skipped, $error, $fatal);
+    }
+
+    /**
+     * @param $exitCode
+     * @return int
+     */
+    private function countChecks($exitCode)
+    {
+        $rv = 0;
+        /** @var CheckInterface $check */
+        foreach ($this->_checks as $check) {
+            if ($check->getExitCode() === $exitCode) {
+                $rv++;
+            }
+        }
+        return $rv;
+    }
+
+    private function buildHtmlReport($exitCode)
+    {
+        $rv = "<h2>[$exitCode]</h2>";
+        /** @var CheckInterface $check */
+        foreach ($this->_checks as $check) {
+            if ($check->getExitCode() === $exitCode) {
+                $rv .= "<h3>" . $check->getName() . "</h3>";
+            }
+        }
+        return $rv;
     }
 }

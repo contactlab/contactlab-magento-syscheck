@@ -3,6 +3,7 @@
 abstract class AbstractCheck implements CheckInterface
 {
     private $_environment;
+    private $exitCode;
     private $_success = array();
     private $_error = array();
 
@@ -27,7 +28,9 @@ abstract class AbstractCheck implements CheckInterface
      */
     public function check() {
         $this->log->trace("Start " . $this->getName() . 'check');
-        return $this->doCheck();
+        $exitCode = $this->doCheck();
+        $this->setExitCode($exitCode);
+        return $exitCode;
     }
 
     /**
@@ -44,6 +47,22 @@ abstract class AbstractCheck implements CheckInterface
      * @return String
      */
     protected abstract function doCheck();
+
+    /**
+     * @return mixed
+     */
+    public function getExitCode()
+    {
+        return $this->exitCode;
+    }
+
+    /**
+     * @param mixed $exitCode
+     */
+    public function setExitCode($exitCode)
+    {
+        $this->exitCode = $exitCode;
+    }
 
     /**
      * Set environment.

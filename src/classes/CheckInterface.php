@@ -69,4 +69,10 @@ interface CheckInterface
      * Need contactlab installation.
      */
     public function needContactlab();
+
+    /**
+     * Get Exit Code.
+     * @return String
+     */
+    public function getExitCode();
 }

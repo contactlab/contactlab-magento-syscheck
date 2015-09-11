@@ -6,6 +6,7 @@ class Options
     private $onlyList = false;
     private $help = false;
     private $path = false;
+    private $sendMail = false;
 
     /**
      * Logger.
@@ -84,6 +85,9 @@ class Options
         if (isset($options['path'])) {
             $this->path = $options['path'];
         }
+        if (isset($options['mail'])) {
+            $this->sendMail = true;
+        }
     }
 
     /**
@@ -95,5 +99,11 @@ class Options
         $this->onlyList = false;
         $this->help = false;
         $this->path = false;
+        $this->sendMail = false;
+    }
+
+    public function mustSendMail()
+    {
+        return $this->sendMail;
     }
 }
