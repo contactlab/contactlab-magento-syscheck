@@ -18,27 +18,6 @@ magento installation path.</pre>
 This is an example of config.json file (into etc directory).
 
 <pre>{
-  "checks": [
-    "PhpVersion",
-    "Version",
-    "Edition",
-    "InstallDate",
-    "CacheBackend",
-    "Session",
-    "Patches",
-    "CustomersCount",
-    "SubscribersCount",
-    "SubscribersSubscribedCount",
-    "SubscribersUnsubscribedCount",
-    "SubscribersCustomersCount",
-    "FindDuplicatedCustomers",
-    "FindInvalidCustomers",
-    "NumberOfOrders",
-    "NumberOfProducts",
-    "Rewrites",
-    "ContactlabAuthApiKey",
-    "MemoryLimit"
-  ],
   "mail": {
     "report_recipients": [
       {
