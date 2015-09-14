@@ -20,6 +20,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->isHelp());
         $this->assertFalse($this->object->hasPath());
         $this->assertFalse($this->object->getPath());
+        $this->assertFalse($this->object->sendData());
         $this->assertEmpty($this->object->getChecks());
     }
 
@@ -51,6 +52,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->hasPath());
         $this->assertFalse($this->object->getPath());
         $this->assertEmpty($this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
     }
 
@@ -66,6 +68,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->hasPath());
         $this->assertTrue(is_array($this->object->getChecks()));
         $this->assertCount(2, $this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
         $this->object->readOptions(array('checks' => 'a'));
         $this->assertFalse($this->object->isOnlyList());
@@ -73,6 +76,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->hasPath());
         $this->assertTrue(is_array($this->object->getChecks()));
         $this->assertCount(1, $this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
     }
 
@@ -87,6 +91,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->isHelp());
         $this->assertFalse($this->object->hasPath());
         $this->assertEmpty($this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
     }
 
@@ -101,6 +106,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->object->isHelp());
         $this->assertFalse($this->object->hasPath());
         $this->assertEmpty($this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
     }
 
@@ -115,6 +121,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->isHelp());
         $this->assertTrue($this->object->hasPath());
         $this->assertEmpty($this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
     }
 
@@ -130,6 +137,7 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->isHelp());
         $this->assertEquals("test", $this->object->getPath());
         $this->assertEmpty($this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertFalse($this->object->mustSendMail());
     }
 
@@ -145,6 +153,21 @@ class OptionsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->isHelp());
         $this->assertFalse($this->object->getPath());
         $this->assertEmpty($this->object->getChecks());
+        $this->assertFalse($this->object->sendData());
         $this->assertTrue($this->object->mustSendMail());
+    }
+    /**
+     * @covers Options::sendData()
+     * @depends testReadOptions
+     */
+    public function testSendData()
+    {
+        $this->object->readOptions(array('send' => true));
+        $this->assertFalse($this->object->isOnlyList());
+        $this->assertFalse($this->object->isHelp());
+        $this->assertFalse($this->object->getPath());
+        $this->assertEmpty($this->object->getChecks());
+        $this->assertTrue($this->object->sendData());
+        $this->assertFalse($this->object->mustSendMail());
     }
 }

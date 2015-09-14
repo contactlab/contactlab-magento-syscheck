@@ -220,4 +220,20 @@ abstract class AbstractCheck implements CheckInterface
         }
         return "<ul>$rv</ul>";
     }
+
+    /**
+     * Do send log data?
+     * @return boolean
+     */
+    public function doSendLogData() {
+        return false;
+    }
+
+    /**
+     * Get to log data.
+     * @return boolean|String
+     */
+    public function getLogData() {
+        return false;
+    }
 }

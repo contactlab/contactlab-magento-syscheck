@@ -5,6 +5,7 @@
  */
 class FindDuplicatedCustomersCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
@@ -12,6 +13,7 @@ class FindDuplicatedCustomersCheck extends AbstractCheck
     protected function doCheck()
     {
         $count = $this->getCount();
+        $this->count = count;
         if ($count > 0) {
             return $this->error(sprintf("Duplicated customers in newsletter subscribers: %d", $count));
         } else {
@@ -25,7 +27,7 @@ class FindDuplicatedCustomersCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "cnt-dc";
+        return "duplicated-customers-count";
     }
 
     /**
@@ -63,5 +65,23 @@ class FindDuplicatedCustomersCheck extends AbstractCheck
     public function getPosition()
     {
         return 130;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

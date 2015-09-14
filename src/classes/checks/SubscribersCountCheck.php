@@ -5,6 +5,7 @@
  */
 class SubscribersCountCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
@@ -12,6 +13,7 @@ class SubscribersCountCheck extends AbstractCheck
     protected function doCheck()
     {
         $count = $this->count();
+        $this->count = $count;
         if ($count === 0) {
             return $this->error("No newsletter subscribers found!");
         }
@@ -27,7 +29,7 @@ class SubscribersCountCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "cnt-s1";
+        return "subscribers-count";
     }
 
     /**
@@ -66,5 +68,23 @@ class SubscribersCountCheck extends AbstractCheck
     public function getPosition()
     {
         return 90;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

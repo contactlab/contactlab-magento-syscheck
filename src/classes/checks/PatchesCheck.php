@@ -30,7 +30,7 @@ class PatchesCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "ptch";
+        return "patches";
     }
 
     /**

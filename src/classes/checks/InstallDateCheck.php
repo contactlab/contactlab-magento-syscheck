@@ -20,7 +20,7 @@ class InstallDateCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "id";
+        return "install-date";
     }
 
     /**

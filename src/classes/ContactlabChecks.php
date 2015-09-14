@@ -148,6 +148,9 @@ class ContactlabChecks
         if ($this->getOptions()->mustSendMail()) {
             $this->doSendMail();
         }
+        if ($this->getOptions()->sendData()) {
+            $this->doSendData();
+        }
     }
 
     /**
@@ -226,7 +229,7 @@ class ContactlabChecks
      */
     private function _printCheck(CheckInterface $checkInstance)
     {
-        printf("#%-15s %s\n", strtolower($checkInstance->getCode()), $checkInstance->getDescription());
+        printf("#%-28s %s\n", strtolower($checkInstance->getCode()), $checkInstance->getDescription());
     }
 
     /**
@@ -397,7 +400,6 @@ class ContactlabChecks
         $header .= "Content-Transfer-Encoding: 7bit\n\n";
         $msg = $this->getMailBody();
         $subject = $this->getMailSubject();
-        echo $header;
         if (!@mail($this->buildMailRecipient($recipients[0]),
             $subject, $msg, $header)) {
             throw new IllegalStateException("Could not send notification email");
@@ -504,5 +506,21 @@ class ContactlabChecks
         });
         return $rv;
     }
-}
 
+    /**
+     * Send report data.
+     * @throws IllegalStateException
+     */
+    private function doSendData()
+    {
+        $toSend = array();
+        $toSend['timestamp'] = time();
+        /** @var CheckInterface $check */
+        foreach ($this->_checks as $check) {
+            if ($check->doSendLogData()) {
+                $toSend[$check->getCode()] = $check->getLogData();
+            }
+        }
+        print_r($toSend);
+    }
+}

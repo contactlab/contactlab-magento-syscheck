@@ -5,6 +5,7 @@
  */
 class CustomersCountCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
@@ -12,6 +13,7 @@ class CustomersCountCheck extends AbstractCheck
     protected function doCheck()
     {
         $count = $this->getCustomersCount();
+        $this->count = $count;
         if ($count === 0) {
             return $this->error("No customers found");
         }
@@ -27,7 +29,7 @@ class CustomersCountCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "cnt-c";
+        return "customer-count";
     }
 
     /**
@@ -65,5 +67,24 @@ class CustomersCountCheck extends AbstractCheck
     public function getPosition()
     {
         return 80;
+    }
+
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

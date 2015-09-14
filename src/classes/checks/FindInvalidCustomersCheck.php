@@ -5,6 +5,7 @@
  */
 class FindInvalidCustomersCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
@@ -12,6 +13,7 @@ class FindInvalidCustomersCheck extends AbstractCheck
     protected function doCheck()
     {
         $count = $this->getCount();
+        $this->count = $count;
         if ($count > 0) {
             return $this->error(sprintf("Invalid customers in newsletter subscribers: %d", $count));
         } else {
@@ -25,7 +27,7 @@ class FindInvalidCustomersCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "cnt-invalid";
+        return "invalid-customer-count";
     }
 
     /**
@@ -65,5 +67,23 @@ class FindInvalidCustomersCheck extends AbstractCheck
     public function getPosition()
     {
         return 140;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

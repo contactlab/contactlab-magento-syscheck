@@ -5,13 +5,15 @@
  */
 class NumberOfOrdersCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
      */
     protected function doCheck()
     {
-        $count = $this->count();
+        $this->count = $this->count();
+        $count = $this->count;
         if ($count === 0) {
             return $this->error("No orders found!");
         }
@@ -27,7 +29,7 @@ class NumberOfOrdersCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "sales";
+        return "sales-count";
     }
 
     /**
@@ -66,5 +68,23 @@ class NumberOfOrdersCheck extends AbstractCheck
     public function getPosition()
     {
         return 150;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

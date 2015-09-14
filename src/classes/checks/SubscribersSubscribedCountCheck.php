@@ -5,13 +5,15 @@
  */
 class SubscribersSubscribedCountCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
      */
     protected function doCheck()
     {
-        return $this->success(sprintf("Subscribers count: %d", $this->getCustomersCount()));
+        $this->count = $this->getCustomersCount();
+        return $this->success(sprintf("Subscribers count: %d", $this->count));
     }
 
     /**
@@ -20,7 +22,7 @@ class SubscribersSubscribedCountCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "cnt-s2";
+        return "subscribed-count";
     }
 
     /**
@@ -59,5 +61,23 @@ class SubscribersSubscribedCountCheck extends AbstractCheck
     public function getPosition()
     {
         return 100;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

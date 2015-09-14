@@ -20,7 +20,7 @@ class PhpVersionCheck extends AbstractCheck
      */
     function getCode()
     {
-        return "phpv";
+        return "php-version";
     }
 
     /**
@@ -47,5 +47,23 @@ class PhpVersionCheck extends AbstractCheck
     public function getPosition()
     {
         return 10;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->getPhpVersion();
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }

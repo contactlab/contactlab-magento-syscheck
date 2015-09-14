@@ -4,8 +4,8 @@ require_once __DIR__ . '/autoload.php';
 
 Logger::configure(array('root'), 'MyLoggerConfigurator');
 
-$shortOpts = "c:lhp:m";
-$longOpts = array("checks:", "list", "help", "path:", "mail");
+$shortOpts = "c:lhp:ms";
+$longOpts = array("checks:", "list", "help", "path:", "mail", "send");
 $options = getopt($shortOpts, $longOpts);
 if (isset($options['c'])) {
     $options['checks'] = $options['c'];
@@ -26,6 +26,10 @@ if (isset($options['p'])) {
 if (isset($options['m'])) {
     $options['mail'] = $options['m'];
     unset($options['m']);
+}
+if (isset($options['s'])) {
+    $options['send'] = $options['s'];
+    unset($options['s']);
 }
 try {
     $checks = new ContactlabChecks(new Options($options));

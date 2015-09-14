@@ -5,6 +5,7 @@
  */
 class NumberOfProductsCheck extends AbstractCheck
 {
+    private $count;
 
     /**
      * Do check.
@@ -12,6 +13,7 @@ class NumberOfProductsCheck extends AbstractCheck
     protected function doCheck()
     {
         $count = $this->count();
+        $this->count = $count;
         if ($count === 0) {
             return $this->error("No products found!");
         }
@@ -66,5 +68,23 @@ class NumberOfProductsCheck extends AbstractCheck
     public function getPosition()
     {
         return 160;
+    }
+
+    /**
+     * Get log data to send.
+     * @return int
+     */
+    public function getLogData()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Do send log data.
+     * @return bool
+     */
+    public function doSendLogData()
+    {
+        return true;
     }
 }
