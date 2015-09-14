@@ -132,10 +132,8 @@ class ContactlabChecks
     private function _startChecks()
     {
         $this->log->trace("Start checks");
-        foreach ($this->getConfiguration()->checks as $check) {
-            $checkClass = $check . 'Check';
+        foreach ($this->getAvailableChecks() as $checkInstance) {
             /** @var CheckInterface $checkInstance */
-            $checkInstance = new $checkClass();
             $checks = $this->getEnvironment()->getOptions()->getChecks();
             if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
                 $this->log->trace("Skip this check (not included in args)");
@@ -158,10 +156,8 @@ class ContactlabChecks
     private function _listChecks()
     {
         $this->log->trace("List checks");
-        foreach ($this->getConfiguration()->checks as $check) {
-            $checkClass = $check . 'Check';
-            /** @var CheckInterface $checkInstance */
-            $checkInstance = new $checkClass();
+        /** @var CheckInterface $checkInstance */
+        foreach ($this->getAvailableChecks() as $checkInstance) {
             $checks = $this->getEnvironment()->getOptions()->getChecks();
             if (!empty($checks) && !in_array($checkInstance->getCode(), $checks)) {
                 continue;
@@ -467,13 +463,46 @@ class ContactlabChecks
 
     private function buildHtmlReport($exitCode)
     {
-        $rv = "<h2>[$exitCode]</h2>";
+        $rv = "";
+        $found = false;
         /** @var CheckInterface $check */
         foreach ($this->_checks as $check) {
             if ($check->getExitCode() === $exitCode) {
-                $rv .= "<h3>" . $check->getName() . "</h3>";
+                $rv .= "<h5>" . $check->getName() . "</h5>";
+                $rv .= $check->toHtml();
+                $found = true;
             }
         }
+        if (!$found) {
+            return "";
+        }
+        return "<h4>[$exitCode]</h4>" . $rv;
+    }
+
+    /**
+     * Get Available checks
+     * @return array
+     */
+    private function getAvailableChecks()
+    {
+        $checkDir = __DIR__ . '/checks';
+        $rv = array();
+        foreach (scandir($checkDir) as $file) {
+            if (!preg_match('|\.php$|', $file)) {
+                continue;
+            }
+            $className = preg_replace('|\.php$|', '', $file);
+            $rv[] = new $className();
+        }
+        usort($rv, function ($a, $b) {
+            $a = $a->getPosition();
+            $b = $b->getPosition();
+            if ($a == $b) {
+                return 0;
+            }
+            return ($a < $b) ? -1 : 1;
+        });
         return $rv;
     }
 }
+

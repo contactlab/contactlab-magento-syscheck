@@ -216,4 +216,13 @@ class RewritesCheck extends AbstractCheck
         $filename = sprintf("%s/app/code/%s/%s.php", $base, $pool, str_replace('_', '/', $className));
         return is_file($filename);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 170;
+    }
 }

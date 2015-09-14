@@ -57,4 +57,13 @@ class FindInvalidCustomersCheck extends AbstractCheck
             $this->_getTableName('customer_entity'));
         return $this->_getSqlResult($sql);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 140;
+    }
 }

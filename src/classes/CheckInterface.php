@@ -75,4 +75,16 @@ interface CheckInterface
      * @return String
      */
     public function getExitCode();
+
+    /**
+     * To html.
+     * @return String
+     */
+    public function toHtml();
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition();
 }

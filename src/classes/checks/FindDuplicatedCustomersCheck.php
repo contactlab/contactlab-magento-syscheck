@@ -55,4 +55,13 @@ class FindDuplicatedCustomersCheck extends AbstractCheck
         $sql = sprintf("select count(1) from (select customer_id, count(1) from %s where customer_id != 0 group by customer_id having count(1) > 1) t;", $this->_getTableName('newsletter_subscriber'));
         return $this->_getSqlResult($sql);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 130;
+    }
 }

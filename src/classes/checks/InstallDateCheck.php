@@ -47,4 +47,13 @@ class InstallDateCheck extends AbstractCheck
         $config = Mage::app()->getConfig();
         return $config->getNode('global/install/date');
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 40;
+    }
 }

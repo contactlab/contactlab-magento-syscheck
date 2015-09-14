@@ -58,4 +58,13 @@ class NumberOfOrdersCheck extends AbstractCheck
         $sql = sprintf("select count(1) from %s", $this->_getTableName('sales_flat_order'));
         return $this->_getSqlResult($sql);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 150;
+    }
 }

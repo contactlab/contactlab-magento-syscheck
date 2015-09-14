@@ -45,4 +45,13 @@ class CacheBackendCheck extends AbstractCheck
     {
         return get_class(Mage::app()->getCache()->getBackend());
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 50;
+    }
 }

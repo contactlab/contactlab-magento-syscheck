@@ -1,25 +1,4 @@
 {
-  "checks": [
-    "PhpVersion",
-    "Version",
-    "Edition",
-    "InstallDate",
-    "CacheBackend",
-    "Session",
-    "Patches",
-    "CustomersCount",
-    "SubscribersCount",
-    "SubscribersSubscribedCount",
-    "SubscribersUnsubscribedCount",
-    "SubscribersCustomersCount",
-    "FindDuplicatedCustomers",
-    "FindInvalidCustomers",
-    "NumberOfOrders",
-    "NumberOfProducts",
-    "Rewrites",
-    "ContactlabAuthApiKey",
-    "MemoryLimit"
-  ],
   "mail": {
     "report_recipients": [
       {

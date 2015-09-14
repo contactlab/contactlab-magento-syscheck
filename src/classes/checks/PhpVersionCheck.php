@@ -39,4 +39,13 @@ class PhpVersionCheck extends AbstractCheck
     {
         return PHP_VERSION;
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 10;
+    }
 }

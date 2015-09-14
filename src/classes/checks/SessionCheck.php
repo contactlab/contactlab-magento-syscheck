@@ -51,4 +51,13 @@ class SessionCheck extends AbstractCheck
         $config = Mage::app()->getConfig();
         return (string) $config->getNode('global/session_save');
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 60;
+    }
 }

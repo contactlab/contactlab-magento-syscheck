@@ -57,4 +57,13 @@ class CustomersCountCheck extends AbstractCheck
         $sql = sprintf("select count(1) from %s", $this->_getTableName('customer_entity'));
         return $this->_getSqlResult($sql);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 80;
+    }
 }

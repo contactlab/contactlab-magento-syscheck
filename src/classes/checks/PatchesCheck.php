@@ -59,4 +59,13 @@ class PatchesCheck extends AbstractCheck
         }
         fclose($handle);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 70;
+    }
 }

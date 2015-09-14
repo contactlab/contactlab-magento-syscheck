@@ -51,4 +51,13 @@ class SubscribersCustomersCountCheck extends AbstractCheck
         $sql = sprintf("select count(1) from %s where customer_id != 0", $this->_getTableName('newsletter_subscriber'));
         return $this->_getSqlResult($sql);
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 120;
+    }
 }

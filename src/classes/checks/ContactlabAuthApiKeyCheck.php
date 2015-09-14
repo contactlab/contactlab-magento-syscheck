@@ -46,4 +46,13 @@ class ContactlabAuthApiKeyCheck extends AbstractCheck
     {
         return true;
     }
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 200;
+    }
 }

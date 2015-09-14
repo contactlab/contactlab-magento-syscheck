@@ -64,4 +64,13 @@ class MemoryLimitCheck extends AbstractCheck
         Mage::getStoreConfig("contactlab_subscribers/global/memory_limit");
     }
 
+
+    /**
+     * Get position.
+     * @return int
+     */
+    public function getPosition()
+    {
+        return 180;
+    }
 }

@@ -202,4 +202,22 @@ abstract class AbstractCheck implements CheckInterface
             $this->outputLine($this->getEnvironment()->getColor()->getColoredStringByCode("[Error] ", self::ERROR) . $line);
         }
     }
+
+    public function toHtml() {
+        return $this->toHtmlArray($this->_error) . $this->toHtmlArray($this->_success);
+    }
+
+    private function toHtmlArray(array &$array)
+    {
+        $found = false;
+        $rv = "";
+        foreach ($array as $line) {
+            $found = true;
+            $rv .= "<li>$line</li>";
+        }
+        if (!$found) {
+            return "";
+        }
+        return "<ul>$rv</ul>";
+    }
 }
