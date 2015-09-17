@@ -3,7 +3,7 @@ contactlab-magento-syscheck Utility
 
 Contactlab Magento Syscheck Utility.
 
-    ```
+    ```Text
     Usage: run-check [-c] <check1> [-c] <check2> [args...] [-h] [-l] [-p] <PATH>
 
       -c --check       Run a single check (can be specified more than once
@@ -42,7 +42,7 @@ Example of etc/config.json
 
 This is an example of config.json file (into etc directory).
 
-    ```
+    ```JavaScript
     {
       "mail": {
         "report_recipients": [
