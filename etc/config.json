@@ -2,13 +2,13 @@
   "mail": {
     "report_recipients": [
       {
-        "name": "Andrea Gaspardo",
-        "mail": "andrea.gaspardo@webformat.com"
+        "name": "John Smith",
+        "mail": "john.smith@example.com"
       }
     ],
     "from": {
-      "name": "Andrea Gaspardo",
-      "mail": "andrea.gaspardo@webformat.com"
+        "name": "John Smith",
+        "mail": "john.smith@example.com"
     }
   }
 }
