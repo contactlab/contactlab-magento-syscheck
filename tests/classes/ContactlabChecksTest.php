@@ -44,8 +44,6 @@ class ContactlabChecksTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('MagentoEnvironment', $this->object->getEnvironment());
         $this->assertInstanceOf('Options', $this->object->getEnvironment()->getOptions());
         $this->assertInstanceOf('stdClass', $this->object->getConfiguration());
-        $this->assertNotEmpty($this->object->getConfiguration()->checks);
-
     }
 
     /**
@@ -56,7 +54,6 @@ class ContactlabChecksTest extends PHPUnit_Framework_TestCase
         $this->object->getOptions()->resetOptions();
         $this->object->getOptions()->readOptions(array('list' => true));
         $this->object->readConfiguration();
-        $this->assertNotEmpty($this->object->getConfiguration()->checks);
     }
 
     /**
@@ -65,7 +62,7 @@ class ContactlabChecksTest extends PHPUnit_Framework_TestCase
     public function testIsSocket()
     {
         $this->assertFalse(ContactlabChecks::isSocket('localhost'));
-        $this->assertTrue(ContactlabChecks::isSocket('/opt/mysql/tmp/mysql.sock'));
+        $this->assertTrue(ContactlabChecks::isSocket('/var/run/mysqld/mysqld.sock'));
     }
 
     protected function setUp()
