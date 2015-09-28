@@ -303,7 +303,16 @@ class ContactlabChecks
         $db = $localXml->global->resources->default_setup->connection;
         $prefix = (string) $localXml->global->resources->db->table_prefix;
         $this->getEnvironment()->setDbPrefix($prefix);
-        $mysqli = new mysqli((string) $db->host, (string) $db->username, (string) $db->password, (string) $db->dbname);
+        $host = (string) $db->host;
+        if ($this->isSocket($host)) {
+            $mysqli = new mysqli(NULL,
+                (string) $db->username,
+                (string) $db->password,
+                (string) $db->dbname,
+                NULL, $host);
+        } else {
+            $mysqli = new mysqli($host, (string) $db->username, (string) $db->password, (string) $db->dbname);
+        }
         if ($mysqli->connect_errno) {
             throw new IllegalStateException($mysqli->connect_error);
         }
@@ -497,6 +506,8 @@ class ContactlabChecks
             $rv[] = new $className();
         }
         usort($rv, function ($a, $b) {
+            /**  @var $a CheckInterface */
+            /**  @var $b CheckInterface */
             $a = $a->getPosition();
             $b = $b->getPosition();
             if ($a == $b) {
@@ -522,5 +533,15 @@ class ContactlabChecks
             }
         }
         print_r($toSend);
+    }
+
+    /**
+     * Is it a socket connection?
+     * @param $host String
+     * @return bool
+     */
+    public static function isSocket($host)
+    {
+        return is_readable($host);
     }
 }

@@ -13,7 +13,7 @@ class FindDuplicatedCustomersCheck extends AbstractCheck
     protected function doCheck()
     {
         $count = $this->getCount();
-        $this->count = count;
+        $this->count = $count;
         if ($count > 0) {
             return $this->error(sprintf("Duplicated customers in newsletter subscribers: %d", $count));
         } else {

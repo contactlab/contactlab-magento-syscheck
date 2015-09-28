@@ -59,6 +59,14 @@ class ContactlabChecksTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->object->getConfiguration()->checks);
     }
 
+    /**
+     * @covers ContactlabChecks::isSocket
+     */
+    public function testIsSocket()
+    {
+        $this->assertFalse(ContactlabChecks::isSocket('localhost'));
+        $this->assertTrue(ContactlabChecks::isSocket('/opt/mysql/tmp/mysql.sock'));
+    }
 
     protected function setUp()
     {
