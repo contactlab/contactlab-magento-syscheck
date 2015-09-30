@@ -87,16 +87,4 @@ interface CheckInterface
      * @return int
      */
     public function getPosition();
-
-    /**
-     * Do send log data?
-     * @return boolean
-     */
-    public function doSendLogData();
-
-    /**
-     * Get to log data.
-     * @return boolean|String
-     */
-    public function getLogData();
 }

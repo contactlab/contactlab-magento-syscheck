@@ -7,7 +7,6 @@ class Options
     private $help = false;
     private $path = false;
     private $sendMail = false;
-    private $sendData = false;
 
     /**
      * Logger.
@@ -60,15 +59,6 @@ class Options
     }
 
     /**
-     * Do send data?
-     * @return boolean
-     */
-    public function sendData()
-    {
-        return $this->sendData;
-    }
-
-    /**
      * Get path?
      * @return String
      */
@@ -102,9 +92,6 @@ class Options
         if (isset($options['mail'])) {
             $this->sendMail = true;
         }
-        if (isset($options['send'])) {
-            $this->sendData = true;
-        }
     }
 
     /**
@@ -117,7 +104,6 @@ class Options
         $this->help = false;
         $this->path = false;
         $this->sendMail = false;
-        $this->sendData = false;
     }
 
     /**

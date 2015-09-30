@@ -52,24 +52,6 @@ class VersionCheck extends AbstractCheck
     }
 
     /**
-     * Get log data to send.
-     * @return int
-     */
-    public function getLogData()
-    {
-        return $this->_getVersion();
-    }
-
-    /**
-     * Do send log data.
-     * @return bool
-     */
-    public function doSendLogData()
-    {
-        return true;
-    }
-
-    /**
      * Get Magento Version.
      * @return String
      */

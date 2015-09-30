@@ -148,9 +148,6 @@ class ContactlabChecks
         if ($this->getOptions()->mustSendMail()) {
             $this->doSendMail();
         }
-        if ($this->getOptions()->sendData()) {
-            $this->doSendData();
-        }
     }
 
     /**
@@ -238,6 +235,7 @@ class ContactlabChecks
     private function _requireMagento()
     {
         $this->log->trace("Requiring magento");
+        /** @noinspection PhpIncludeInspection */
         require_once($this->_magePath . '/app/Mage.php');
         $this->_magentoRequired = true;
     }
@@ -300,7 +298,9 @@ class ContactlabChecks
     {
         $this->log->trace("Connect to db");
         $localXml = simplexml_load_file($this->_getLocalXml());
+        /** @noinspection PhpUndefinedFieldInspection */
         $db = $localXml->global->resources->default_setup->connection;
+        /** @noinspection PhpUndefinedFieldInspection */
         $prefix = (string) $localXml->global->resources->db->table_prefix;
         $this->getEnvironment()->setDbPrefix($prefix);
         $host = (string) $db->host;
@@ -334,11 +334,13 @@ class ContactlabChecks
     private function _runMagento()
     {
         $this->log->trace("Running magento");
+        /** @noinspection PhpUndefinedClassInspection */
         Mage::app();
     }
 
     private function _checkContactlabPlugins()
     {
+        /** @noinspection PhpUndefinedClassInspection */
         return Mage::helper('core')->isModuleEnabled('Contactlab_Commons');
     }
 
@@ -516,23 +518,6 @@ class ContactlabChecks
             return ($a < $b) ? -1 : 1;
         });
         return $rv;
-    }
-
-    /**
-     * Send report data.
-     * @throws IllegalStateException
-     */
-    private function doSendData()
-    {
-        $toSend = array();
-        $toSend['timestamp'] = time();
-        /** @var CheckInterface $check */
-        foreach ($this->_checks as $check) {
-            if ($check->doSendLogData()) {
-                $toSend[$check->getCode()] = $check->getLogData();
-            }
-        }
-        print_r($toSend);
     }
 
     /**
