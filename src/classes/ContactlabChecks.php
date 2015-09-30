@@ -438,7 +438,7 @@ class ContactlabChecks
         $fatal = $this->buildHtmlReport(CheckInterface::FATAL);
         $error = $this->buildHtmlReport(CheckInterface::ERROR);
 
-        $body = $fatal . $error . $skipped . $success;
+        $body = $fatal . PHP_EOL . $error . PHP_EOL . $skipped . PHP_EOL . $success;
 
         return file_get_contents($this->getFooterMailFile())
              . $body . file_get_contents($this->getFooterMailFile());
