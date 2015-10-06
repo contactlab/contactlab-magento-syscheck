@@ -69,22 +69,4 @@ class NumberOfOrdersCheck extends AbstractCheck
     {
         return 150;
     }
-
-    /**
-     * Get log data to send.
-     * @return int
-     */
-    public function getLogData()
-    {
-        return $this->count;
-    }
-
-    /**
-     * Do send log data.
-     * @return bool
-     */
-    public function doSendLogData()
-    {
-        return true;
-    }
 }

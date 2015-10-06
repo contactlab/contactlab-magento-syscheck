@@ -82,23 +82,4 @@ class BaseUrlCheck extends AbstractCheck
     {
         return 35;
     }
-
-
-    /**
-     * Get log data to send.
-     * @return int
-     */
-    public function getLogData()
-    {
-        return implode(', ', $this->urls);
-    }
-
-    /**
-     * Do send log data.
-     * @return bool
-     */
-    public function doSendLogData()
-    {
-        return true;
-    }
 }

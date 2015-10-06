@@ -50,24 +50,6 @@ class EditionCheck extends AbstractCheck
         return 30;
     }
 
-    /**
-     * Get log data to send.
-     * @return int
-     */
-    public function getLogData()
-    {
-        return $this->getEdition();
-    }
-
-    /**
-     * Do send log data.
-     * @return bool
-     */
-    public function doSendLogData()
-    {
-        return true;
-    }
-
     private function getEdition()
     {
         return Mage::getEdition();
