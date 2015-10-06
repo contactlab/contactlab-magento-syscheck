@@ -68,22 +68,4 @@ class FindInvalidCustomersCheck extends AbstractCheck
     {
         return 140;
     }
-
-    /**
-     * Get log data to send.
-     * @return int
-     */
-    public function getLogData()
-    {
-        return $this->count;
-    }
-
-    /**
-     * Do send log data.
-     * @return bool
-     */
-    public function doSendLogData()
-    {
-        return true;
-    }
 }
